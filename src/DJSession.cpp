@@ -9,7 +9,16 @@
 
 
 DJSession::DJSession(const std::string& name, bool play_all)
-    : session_name(name), play_all(play_all) {
+    : session_name(name),
+    library_service(),
+    controller_service(),
+    mixing_service(),
+    config_manager(),
+    session_config(),
+    track_titles(),
+    play_all(play_all),
+    stats()
+      {
     std::cout << "DJ Session System initialized: " << session_name << std::endl;
 }
 
@@ -144,7 +153,7 @@ void DJSession::simulate_dj_performance() {
     std::cout << "Cache Capacity: " << session_config.controller_cache_size << " slots (LRU policy)" << std::endl;
     std::cout << "\n--- Processing Tracks ---" << std::endl;
 
-    std::cout << "TODO: Implement the DJ performance simulation workflow here." << std::endl;
+    //std::cout << "TODO: Implement the DJ performance simulation workflow here." << std::endl;
     // Your implementation here
     std::vector<std::string> playlist_names;
     if (play_all) {
@@ -169,7 +178,7 @@ void DJSession::simulate_dj_performance() {
             continue;
         }
         for (std::string track_title : track_titles) {
-            std::cout << "\n-- Processing: " << track_title <<" --" << std::endl;
+            std::cout << "\n--- Processing: " << track_title <<" ---" << std::endl;
             stats.tracks_processed++;
             load_track_to_controller(track_title);
             controller_service.displayCacheStatus();    //print cache status
@@ -179,14 +188,6 @@ void DJSession::simulate_dj_performance() {
             //cache, deck and transition statistics are updated in these functions
         }
         print_session_summary();
-        stats.tracks_processed = 0;
-        stats.cache_hits = 0;
-        stats.cache_misses = 0;
-        stats.cache_evictions = 0;
-        stats.deck_loads_a = 0;
-        stats.deck_loads_b = 0;
-        stats.transitions = 0;
-        stats.errors = 0;
     }
     std::cout << "Session cancelled by user or all playlists played." << std::endl;
 }

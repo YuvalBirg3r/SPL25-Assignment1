@@ -177,6 +177,7 @@ void DJSession::simulate_dj_performance() {
             std::cout << "[ERROR] Failed to load playlist: " << next_playlist << std::endl;
             continue;
         }
+        std::reverse(track_titles.begin(), track_titles.end());     //reverse title order
         for (std::string track_title : track_titles) {
             std::cout << "\n--- Processing: " << track_title <<" ---" << std::endl;
             stats.tracks_processed++;
@@ -199,7 +200,7 @@ void DJSession::simulate_dj_performance() {
  * @return: true if configuration loaded successfully; false on error
  */
 bool DJSession::load_configuration() {
-    const std::string config_path = "input_2/dj_config.txt";
+    const std::string config_path = "bin/dj_config.txt";
     
     std::cout << "Loading configuration from: " << config_path << std::endl;
     

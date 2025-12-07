@@ -56,21 +56,17 @@ int MixingEngineService::loadTrackToDeck(const AudioTrack& track) {
     pw->load();                                                             //g - prepare cloned track
     pw->analyze_beatgrid();
 
-    if (auto_sync                                                           //h - bpm management
-            && decks[active_deck]   //if first, then decks[active_deck] is null
-            && !can_mix_tracks(pw)) {
-        sync_bpm(pw);
+    if (auto_sync && !can_mix_tracks(pw)) {                                 //h - bpm management
+        if (decks[active_deck]) {   //if first, then decks[active_deck] is null
+            sync_bpm(pw);
+        }
+        else {
+            std::cout << "[Sync BPM] Cannot sync - one of the decks is empty." << std::endl;
+        }
     }
 
     decks[target] = pw.release();                                           //i - release pw, assign, log
     std::cout << "[Load Complete] '" << decks[target]->get_title() << "' is now loaded on deck " << target << std::endl;
-    
-    if (!first_track) {                                                     //j - instant transition
-        std::cout << "[Unload] Unloading previous deck " 
-                  << active_deck << " (" << decks[active_deck]->get_title() << ")" << std::endl;
-        delete decks[active_deck];
-        decks[active_deck] = nullptr;
-    }
 
     active_deck = target;                                                   //k - switch active deck
     
